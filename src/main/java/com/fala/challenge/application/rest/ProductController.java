@@ -50,8 +50,6 @@ public class ProductController {
     @Autowired
     private ProductServicePort productServicePort;
 
-    @Autowired
-    private FeatureToggle featureToggle;
 
     @PostMapping()
     @ResponseStatus(CREATED)
