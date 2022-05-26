@@ -27,6 +27,9 @@ spring:
     initialization-mode: ALWAYS
     continue-on-error: false
 
+  main:
+    allow-bean-definition-overriding: true
+
 server:
   error:
     include-binding-errors: always

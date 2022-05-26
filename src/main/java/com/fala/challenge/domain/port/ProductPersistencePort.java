@@ -1,21 +1,21 @@
 package com.fala.challenge.domain.port;
 
 
-import java.util.List;
-
 import com.fala.challenge.domain.model.Product;
 import com.fala.challenge.infrastructure.entity.ProductEntity;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 public interface ProductPersistencePort {
 
-    ProductEntity saveProduct(Product product);
+    Mono<ProductEntity> saveProduct(Product product);
 
-    ProductEntity findBySku(String sku);
+    Mono<ProductEntity> findBySku(String sku);
 
-    List<ProductEntity> findAllProducts();
+    Flux<ProductEntity> findAllProducts();
 
-    boolean validProductForCreation(String sku);
+    Mono<Boolean> validProductForCreation(String sku);
 
-    Long deleteProductById(Long productId);
+    Mono<Void> deleteProductById(Long productId);
 }

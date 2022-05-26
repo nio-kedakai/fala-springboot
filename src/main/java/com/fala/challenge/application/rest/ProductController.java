@@ -1,6 +1,6 @@
 package com.fala.challenge.application.rest;
 
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -53,8 +54,8 @@ public class ProductController {
 
     @PostMapping()
     @ResponseStatus(CREATED)
-    public ResponseEntity createProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                        @RequestBody ProductRequest request) {
+    public ResponseEntity<Mono<Product>> createProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
+                                                       @RequestBody ProductRequest request) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
@@ -63,14 +64,14 @@ public class ProductController {
 
             log.info("Validating if Product :: {} exist in DB", request.getName());
 
-            boolean valid = productServicePort.validProductForCreation(request.getSku());
-            log.info("Valid Product for creation :: {} ", valid);
+            Mono<Boolean> valid = productServicePort.validProductForCreation(request.getSku());
+            log.info("Valid Product for creation :: {} ", valid.subscribe(p -> p.booleanValue()));
 
-            Product productSave = productServicePort.saveProduct(request);
+            Mono<Product> productSave = productServicePort.saveProduct(request);
 
             totalTime.stop();
             MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
-            log.info("Finish createProduct successfully for Product :: {}", productSave.getName());
+            log.info("Finish createProduct successfully for Product :: {}", productSave.map(p -> p.getName()));
 
             return ResponseEntity.status(CREATED).body(productSave);
         } finally {
@@ -80,15 +81,15 @@ public class ProductController {
     }
 
     @GetMapping(ALL_PRODUCTS_PATH)
-    public ResponseEntity findAllProducts(@RequestHeader(name = AUTHORIZATION, required = false) String authorization) {
+    public ResponseEntity<Flux<Product>> findAllProducts(@RequestHeader(name = AUTHORIZATION, required = false) String authorization) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
 
             log.info("Init findAllProducts");
 
-            List<Product> products = productServicePort.findAllProducts();
-            log.info("Products founded:: {}", products.size());
+            Flux<Product> products = productServicePort.findAllProducts();
+            log.info("Products founded:: {}", products.toStream().count());
 
             totalTime.stop();
             MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
@@ -102,8 +103,8 @@ public class ProductController {
     }
 
     @GetMapping(value = SKU_PATH)
-    public ResponseEntity findProductBySku(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                           @PathVariable @NotNull String sku) {
+    public ResponseEntity<Mono<Product>> findProductBySku(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
+                                                          @PathVariable @NotNull String sku) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
@@ -111,7 +112,7 @@ public class ProductController {
             log.info("Init findProductBySku Product :: {}", sku);
 
             log.info(FIND_PRODUCT_LOG, sku);
-            Product product = productServicePort.findProductBySku(sku);
+            Mono<Product> product = productServicePort.findProductBySku(sku);
             log.info(PRODUCT_FOUNDED, sku, product != null);
 
             totalTime.stop();
@@ -127,8 +128,8 @@ public class ProductController {
 
     @PutMapping(value = SKU_PATH)
     @ResponseStatus(OK)
-    public ResponseEntity updateProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                        @PathVariable String sku, @Valid @RequestBody ProductRequest request) {
+    public ResponseEntity<Mono<Product>> updateProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
+                                                       @PathVariable String sku, @Valid @RequestBody ProductRequest request) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
@@ -136,19 +137,18 @@ public class ProductController {
             log.info("Init updateProduct Product :: {}", sku);
 
             log.info(FIND_PRODUCT_LOG, sku);
-            Product product = productServicePort.findProductBySku(sku);
+            Mono<Product> product = productServicePort.findProductBySku(sku);
             log.info(PRODUCT_FOUNDED, sku, product != null);
-
-            request.setId(product.getId());
+            product.subscribe(p -> request.setId(p.getId()));
 
             log.info("updating Product :: {}", sku);
-            Product productUpdate = productServicePort.saveProduct(request);
+            Mono<Product> productUpdate = productServicePort.saveProduct(request);
 
             log.info("Product {} updated :: {}", sku, productUpdate != null);
 
             totalTime.stop();
             MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
-            log.info("Finish Successfully updateProduct, Product :: {}", productUpdate.toString());
+            log.info("Finish Successfully updateProduct, Product :: {}", productUpdate.subscribe(p -> p.toString()));
 
             return ResponseEntity.status(OK).body(productUpdate);
         } finally {
@@ -157,42 +157,11 @@ public class ProductController {
 
     }
 
-    @PatchMapping(value = SKU_PATH)
-    @ResponseStatus(OK)
-    public ResponseEntity patchProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                       @PathVariable String sku, @Valid @RequestBody ProductRequest request) {
-        try {
-            StopWatch totalTime = new StopWatch();
-            totalTime.start();
-
-            log.info("Init patchProduct Product :: {}", sku);
-
-            log.info(FIND_PRODUCT_LOG, sku);
-            Product product = productServicePort.findProductBySku(sku);
-            log.info(PRODUCT_FOUNDED, sku, product != null);
-
-            request.setName(sku);
-
-            log.info("patchProduct Product :: {}", sku);
-            Product productUpdate = productServicePort.saveProduct(request);
-
-            log.info("patchProduct Product :: {}", sku);
-
-            totalTime.stop();
-            MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
-            log.info("Finish Successfully patchProduct, Product :: {}", productUpdate.toString());
-
-            return ResponseEntity.status(OK).body(productUpdate);
-        } finally {
-            MDC.clear();
-        }
-
-    }
 
     @DeleteMapping(value = SKU_PATH)
     @ResponseStatus(OK)
-    public ResponseEntity deleteProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                        @PathVariable String sku) {
+    public ResponseEntity<Mono<Void>> deleteProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
+                                                    @PathVariable String sku) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
@@ -205,16 +174,21 @@ public class ProductController {
             log.info("Init deleteProduct Product :: {}", sku);
 
             log.info(FIND_PRODUCT_LOG, sku);
-            Product product = productServicePort.findProductBySku(sku);
+            Mono<Product> product = productServicePort.findProductBySku(sku);
             log.info(PRODUCT_FOUNDED, sku, product != null);
 
             log.info("deleteProduct Product :: {}", sku);
-            Long productDeleteId = productServicePort.deleteProductById(product.getId());
+            AtomicReference<Long> idForDelete = new AtomicReference<>(0L);
+            product.subscribe(p -> {
+                idForDelete.set(p.getId());
+            });
+            productServicePort.deleteProductById(idForDelete.get());
+
 
             log.info("deleteProduct Product :: {}", sku);
             totalTime.stop();
             MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
-            log.info("Successfully deleteProduct :: {}", productDeleteId);
+            log.info("Successfully deleteProduct :: {}", sku);
 
             return ResponseEntity.status(OK).build();
         } finally {

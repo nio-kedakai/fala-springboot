@@ -1,20 +1,20 @@
 package com.fala.challenge.domain.port;
 
 
-import java.util.List;
-
 import com.fala.challenge.domain.model.Product;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 public interface ProductServicePort {
 
-    Product saveProduct(Product product);
+    Mono<Product> saveProduct(Product product);
 
-    Product findProductBySku(String sku);
+    Mono<Product> findProductBySku(String sku);
 
-    List<Product> findAllProducts();
+    Flux<Product> findAllProducts();
 
-    boolean validProductForCreation(String sku);
+    Mono<Boolean> validProductForCreation(String sku);
 
-    Long deleteProductById(Long productId);
+    Mono<Void> deleteProductById(Long productId);
 }

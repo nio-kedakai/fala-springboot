@@ -1,5 +1,6 @@
 package com.fala.challenge.domain.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class Product {
+public class Product implements Serializable {
 
     private Long id;
     private String sku;
