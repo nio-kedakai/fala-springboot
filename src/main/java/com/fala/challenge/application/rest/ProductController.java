@@ -44,7 +44,7 @@ public class ProductController {
     static final String FIND_PRODUCT_LOG = "find Product :: {}";
     static final String PRODUCT_FOUNDED = "Product :: {} founded:: {}";
     static final String SKU_PATH = "/{sku}";
-    static final String ALL_PRODUCTS_PATH = "/getAllProducts";
+    static final String ALL_PRODUCTS_PATH = "/products";
 
 
     @Autowired

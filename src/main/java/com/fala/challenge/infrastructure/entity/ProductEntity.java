@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 import com.fala.challenge.domain.model.Product;
 import com.fala.challenge.infrastructure.mapper.ProductDomainMapper;
 import lombok.AllArgsConstructor;
@@ -43,8 +42,6 @@ public class ProductEntity {
     @Column(name = "principal_image")
     private String principalImage;
 
-//    @Column(name = "other_images")
-//    private List otherImages;
 
     public Product toDomain() {
         return ProductDomainMapper.INSTANCE.toDomain(this);

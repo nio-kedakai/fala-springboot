@@ -25,6 +25,4 @@ public interface ProductDomainMapper {
     @Mappings({})
     List<Product> listToDomain(List<ProductEntity> productEntities);
 
-    @Mappings({})
-    List<ProductEntity> listToEntity(List<Product> products);
 }

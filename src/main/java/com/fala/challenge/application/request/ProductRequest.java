@@ -14,4 +14,5 @@ public class ProductRequest extends Product {
     @JsonProperty("principal_image")
     private String principalImage;
 
+
 }

@@ -53,11 +53,10 @@ public class Product implements Serializable {
     @Max(value = 99999999, message = "price should not be greater than 99999999.00")
     private BigDecimal price;
 
-
     @Valid
     @UrlValidation
     private String principalImage;
-    //private List otherImages;
+
 
     public ProductEntity toEntity() {
         return ProductDomainMapper.INSTANCE.toEntity(this);
