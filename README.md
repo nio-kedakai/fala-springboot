@@ -29,7 +29,7 @@ docker pull postgres
 ```
 
 3.- Entrar por terminar al root del proyecto proyecto **fala-springboot** 
-y en la terminal ejecutar el siguiente comando
+y ejecutar el siguiente comando
 
 ```
 docker-compose up
@@ -40,8 +40,8 @@ de configuración indicados en este mismo (nombre de la BD, usuario, password, p
 
 
 4.- Entrar por terminar al root del proyecto proyecto **fala-springboot**
-y en la terminal ejecutar el siguiente comando (**solo cuando se desea 
-terminar con la ejecutación de las pruebas localmente**)
+y ejecutar el siguiente comando (**solo cuando se desea 
+TERMINAR/FINALIZAR con la ejecutación de las pruebas localmente**)
 
 ```
 docker-compose down
@@ -81,16 +81,44 @@ docker-compose down
 "principal_image":"http://www.falabella.com/2"
 }
 ```
+## Arquitectura del proyecto
+
+El proyecto está compuesto por una arquitectura hexagonal, la cual nos va a permitir crear adaptadores independientes 
+de la tecnología que usemos en el dominio.
+
+Actualmente está usando PostgreSQL, con JPA Hibernate para el mapeo entre objeto entidad.
+
+Para correr esta APP, se levanta un servicio Fly Way, la cual está configurada para crear y llenar la tabla con datos de ejemplo
+una vez que se ejecute previamente el paso 3 (docker compose up), con esta tecnología podemos realizar migraciones mucho
+más faciles en nuestro microservicio sin necesidad de ingresar a la BD a realizar directamente los ALTER o BULK.
+
+Los scripts se encuentran ubicado en:
+
+`fala-springboot/src/main/resources/db/migration`
+
+Está adaptado para ser reactivo, usa WebFlux.
+
+Para mapear los objetos a entidad usa **mapstruct**. 
+
+## Testing
+
+La APP cree bastantes componentes donde no dí con el 85% de cobertura pero sin con el 79% (enduve cerca).
+
+Pueden revisar la configuración del criterio de coverage en **gradle/sourceQA.gradle**
+
+Para revisar los reportes generados se debe ir a **build/reports/**.  Esta carpeta se genera cuando se compila
+o construye el proyecto, creando 4 subcarpetas llamadas: **checkstyle, jacoco, pmd y tests**.
+
+Dentro de cada una de ellas existe un archivo **.html** el cual se puede abrir en el navegador y revisar los reportes generados.
+
+En esta APP se usa para el análisis estático:
+
+```Spotbugs, checkstyle, jacoco y PMD.```
+
+Las configuraciones están en la carpeta **config/**, la cual respectivamente tiene la configuración para checkstyle, pmd y spotbugs.
+
+## Gradle
+
+En el IDE IntelliJ se puede revisar en la pestaña Gradle
 
 
-> Task :compileJava
-> Task :processResources
-> Task :classes
-> Task :checkstyleMain
-> Task :compileTestJava
-> Task :processTestResources NO-SOURCE
-> Task :testClasses
-> Task :checkstyleTest
-> Task :pmdMain
-> Task :pmdTest
-> Task :test
