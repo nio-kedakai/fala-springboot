@@ -14,6 +14,11 @@ code challenge for TL role
 8. [ ] Seleccionar la clase principal **"com.fala.challenge.FalaSpringBootApplication"**
 9. [ ] Descargar las dependencias desde el archivo **build.gradle**
 
+
+Debería quedar así:
+
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/configuracion_app_intellij.png)
+
 ## Pasos para la instalación
 
 1.- Instalación Docker 
@@ -96,6 +101,8 @@ Los scripts se encuentran ubicado en:
 
 `fala-springboot/src/main/resources/db/migration`
 
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/mapa_carpetas_main.png)
+
 Está adaptado para ser reactivo, usa WebFlux.
 
 Para mapear los objetos a entidad usa **mapstruct**. 
@@ -107,18 +114,28 @@ La carpeta que contiene los test unitarios es: `fala-springboot/src/test`
 En la carpeta `fala-springboot/src/test/resources/` se alojan los archivos json para los test de 
 integracion del servicio rest
 
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/mapa_carpetas_test.png)
+
 La APP cree bastantes componentes donde no dí con el 85% de cobertura pero sin con el 79% (enduve cerca).
+
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/configuracion_coverage_testing_gradle.png)
 
 Pueden revisar la configuración del criterio de coverage en **gradle/sourceQA.gradle**
 
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/mapa_carpetas_QA_gradle.png)
+
 Para revisar los reportes generados se debe ir a **build/reports/**.  Esta carpeta se genera cuando se compila
 o construye el proyecto, creando 4 subcarpetas llamadas: **checkstyle, jacoco, pmd y tests**.
+
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/mapa_carpetas_reportes_estaticos.png)
 
 Dentro de cada una de ellas existe un archivo **.html** el cual se puede abrir en el navegador y revisar los reportes generados.
 
 En esta APP se usa para el análisis estático:
 
 ```Spotbugs, checkstyle, jacoco y PMD.```
+
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/mapa_carpetas_analisis_estatico.png)
 
 Las configuraciones están en la carpeta **config/**, la cual respectivamente tiene la configuración para checkstyle, pmd y spotbugs.
 
@@ -127,7 +144,7 @@ Las configuraciones están en la carpeta **config/**, la cual respectivamente ti
 En el IDE IntelliJ se puede revisar en la pestaña Gradle
 
 
-# Diagram
+### Tasks Gradle
 ![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/gradle_app.png)
 
 En la imagen anterior se aprecia en el punto 1, es el task que permite levantar el proyecto o aplicación.
