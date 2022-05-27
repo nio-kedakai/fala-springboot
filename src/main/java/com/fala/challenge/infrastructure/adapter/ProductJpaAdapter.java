@@ -25,9 +25,8 @@ public class ProductJpaAdapter implements ProductPersistencePort {
     @Transactional
     public Mono<ProductEntity> saveProduct(Product product) {
         try {
-            Mono<ProductEntity> productEntity = Mono
+            return Mono
                     .defer(() -> Mono.just(productRepository.save(product.toEntity())));
-            return productEntity;
         } catch (IllegalArgumentException e) {
             throw ResourceException.illegalArgument();
         }

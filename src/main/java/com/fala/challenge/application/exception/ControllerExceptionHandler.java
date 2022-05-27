@@ -28,7 +28,10 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = {ResourceException.class})
     @ResponseStatus(value = NOT_FOUND)
     public ErrorMessage resourceException(ResourceException e) {
-        log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        if (log.isErrorEnabled()) {
+            log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        }
+
         String description = ExceptionUtils.getStackTrace(e);
         return getExceptionErrorMessage(e, NOT_FOUND, description);
     }
@@ -36,7 +39,10 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(value = INTERNAL_SERVER_ERROR)
     public ErrorMessage internalServerException(Exception e) {
-        log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        if (log.isErrorEnabled()) {
+            log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        }
+
         String description = ExceptionUtils.getStackTrace(e);
         return getExceptionErrorMessage(e, INTERNAL_SERVER_ERROR, description);
     }
@@ -44,7 +50,10 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = {BusinessException.class})
     @ResponseStatus(value = INTERNAL_SERVER_ERROR)
     public ErrorMessage duplicateProductException(BusinessException e) {
-        log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        if (log.isErrorEnabled()) {
+            log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        }
+
         String description = ExceptionUtils.getStackTrace(e);
         return getExceptionErrorMessage(e, INTERNAL_SERVER_ERROR, description);
     }
@@ -52,7 +61,10 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = {MissingPathVariableException.class})
     @ResponseStatus(value = BAD_REQUEST)
     public ErrorMessage missingBodyException(MissingPathVariableException e) {
-        log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        if (log.isErrorEnabled()) {
+            log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        }
+
         String description = ExceptionUtils.getStackTrace(e);
         return getExceptionErrorMessage(e, BAD_REQUEST, description);
     }
@@ -60,7 +72,10 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = {ApiException.class})
     @ResponseStatus(value = BAD_REQUEST)
     public ErrorMessage missingPathVariableException(ApiException e) {
-        log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        if (log.isErrorEnabled()) {
+            log.error(exceptionWithTraceMessage, e.getMessage(), ExceptionUtils.getStackTrace(e));
+        }
+
         String description = ExceptionUtils.getStackTrace(e);
         return getExceptionErrorMessage(e, BAD_REQUEST, description);
     }

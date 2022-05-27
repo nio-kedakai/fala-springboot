@@ -4,10 +4,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.validation.Valid;
 
-
-import com.fala.challenge.application.validation.SkuValidation;
 import com.fala.challenge.application.exception.ApiException;
 import com.fala.challenge.application.request.ProductRequest;
+import com.fala.challenge.application.validation.SkuValidation;
 import com.fala.challenge.domain.model.Product;
 import com.fala.challenge.domain.port.ProductServicePort;
 import lombok.RequiredArgsConstructor;
@@ -60,18 +59,27 @@ public class ProductController {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
 
-            log.info("Init createProduct Product :: {}", request.toString());
-
-            log.info("Validating if Product :: {} exist in DB", request.getName());
+            if (log.isInfoEnabled()) {
+                log.info("Init createProduct Product :: {} ", request.toString());
+                log.info("Validating if Product :: {} exist in DB", request.getName());
+            }
 
             Mono<Boolean> valid = productServicePort.validProductForCreation(request.getSku());
-            log.info("Valid Product for creation :: {} ", valid.subscribe(p -> p.booleanValue()));
+
+            if (log.isInfoEnabled()) {
+                log.info("Valid Product for creation :: {} ", valid.subscribe(p -> p.booleanValue()));
+            }
+
 
             Mono<Product> productSave = productServicePort.saveProduct(request);
 
             totalTime.stop();
             MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
-            log.info("Finish createProduct successfully for Product :: {}", productSave.map(p -> p.getName()));
+
+            if (log.isInfoEnabled()) {
+                log.info("Finish createProduct successfully for Product :: {}", productSave.map(p -> p.getName()));
+            }
+
 
             return ResponseEntity.status(CREATED).body(productSave);
         } finally {
@@ -89,7 +97,11 @@ public class ProductController {
             log.info("Init findAllProducts");
 
             Flux<Product> products = productServicePort.findAllProducts();
-            log.info("Products founded:: {}", products.toStream().count());
+
+            if (log.isInfoEnabled()) {
+                log.info("Products founded:: {}", products.toStream().count());
+            }
+
 
             totalTime.stop();
             MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
@@ -144,11 +156,17 @@ public class ProductController {
             log.info("updating Product :: {}", sku);
             Mono<Product> productUpdate = productServicePort.saveProduct(request);
 
-            log.info("Product {} updated :: {}", sku, productUpdate != null);
+            if (log.isInfoEnabled()) {
+                log.info("Product {} updated :: {}", sku, productUpdate != null);
+            }
 
             totalTime.stop();
             MDC.put(TOTAL_TIME_TAKEN, String.valueOf(totalTime.getTime()));
-            log.info("Finish Successfully updateProduct, Product :: {}", productUpdate.subscribe(p -> p.toString()));
+
+            if (log.isInfoEnabled()) {
+                log.info("Finish Successfully updateProduct, Product :: {}", productUpdate.subscribe(p -> p.toString()));
+            }
+
 
             return ResponseEntity.status(OK).body(productUpdate);
         } finally {

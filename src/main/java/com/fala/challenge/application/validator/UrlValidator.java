@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.fala.challenge.application.validation.SkuValidation;
 import com.fala.challenge.application.validation.UrlValidation;
 import org.springframework.stereotype.Component;
 

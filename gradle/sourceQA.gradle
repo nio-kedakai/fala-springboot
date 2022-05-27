@@ -1,0 +1,62 @@
+jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories.setFrom(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "com/fala/challenge/application/exception/*",
+                    "com/fala/challenge/application/response/.*",
+                    "com/fala/challenge/application/util/Constants.*",
+                    "com/fala/challenge/UserApplication.*",
+                    "com/fala/challenge/domain/exception/*",
+                    "com/fala/challenge/domain/model/*",
+                    "com/fala/challenge/domain/port/*",
+                    "com/fala/challenge/infrastructure/adapter/*",
+                    "com/fala/challenge/infrastructure/configuration/*",
+                    "com/fala/challenge/infrastructure/repository/*"
+
+
+            ])
+        })
+    }
+
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                minimum = 0.10
+            }
+        }
+
+        rule {
+            limit {
+                counter = 'BRANCH'
+                minimum = 0.10
+            }
+        }
+    }
+}
+check.dependsOn jacocoTestCoverageVerification
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.setFrom(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "com/fala/challenge/application/exception/*",
+                    "com/fala/challenge/application/response/.*",
+                    "com/fala/challenge/application/util/Constants.*",
+                    "com/fala/challenge/UserApplication.*",
+                    "com/fala/challenge/domain/exception/*",
+                    "com/fala/challenge/domain/model/*",
+                    "com/fala/challenge/domain/port/*",
+                    "com/fala/challenge/infrastructure/adapter/*",
+                    "com/fala/challenge/infrastructure/configuration/*",
+                    "com/fala/challenge/infrastructure/repository/*"
+            ])
+        })
+    }
+
+    reports {
+        html.destination file("${buildDir}/reports/jacoco")
+    }
+}
+
+check.dependsOn jacocoTestReport

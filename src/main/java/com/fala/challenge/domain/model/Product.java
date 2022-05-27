@@ -2,7 +2,6 @@ package com.fala.challenge.domain.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -14,7 +13,6 @@ import javax.validation.constraints.Size;
 import com.fala.challenge.application.validation.SkuValidation;
 import com.fala.challenge.application.validation.UrlValidation;
 import com.fala.challenge.infrastructure.entity.ProductEntity;
-
 import com.fala.challenge.infrastructure.mapper.ProductDomainMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Product implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 

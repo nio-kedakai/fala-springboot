@@ -2,17 +2,23 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
+	id 'checkstyle'
+	id 'pmd'
 }
 
 group = 'com.fala'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+targetCompatibility = '11'
 
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
 }
+
+apply from: 'gradle/sourceQA.gradle'
 
 repositories {
 	mavenCentral()
@@ -38,4 +44,14 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+checkstyle {
+	toolVersion "7.6.1"
+}
+
+pmd {
+	ruleSetConfig = resources.text.fromFile("config/pmd/ruleset.xml")
+	ruleSets = []
+	consoleOutput = true
 }
