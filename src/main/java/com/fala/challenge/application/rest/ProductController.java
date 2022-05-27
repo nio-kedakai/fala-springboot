@@ -3,9 +3,9 @@ package com.fala.challenge.application.rest;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 
+import com.fala.challenge.application.validation.SkuValidation;
 import com.fala.challenge.application.exception.ApiException;
 import com.fala.challenge.application.request.ProductRequest;
 import com.fala.challenge.domain.model.Product;
@@ -55,7 +55,7 @@ public class ProductController {
     @PostMapping()
     @ResponseStatus(CREATED)
     public ResponseEntity<Mono<Product>> createProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                                       @RequestBody ProductRequest request) {
+                                                       @Valid @RequestBody ProductRequest request) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
@@ -104,7 +104,7 @@ public class ProductController {
 
     @GetMapping(value = SKU_PATH)
     public ResponseEntity<Mono<Product>> findProductBySku(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                                          @PathVariable @NotNull String sku) {
+                                                          @Valid @SkuValidation @PathVariable String sku) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
@@ -129,7 +129,7 @@ public class ProductController {
     @PutMapping(value = SKU_PATH)
     @ResponseStatus(OK)
     public ResponseEntity<Mono<Product>> updateProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                                       @PathVariable String sku, @Valid @RequestBody ProductRequest request) {
+                                                       @Valid @SkuValidation @PathVariable String sku, @Valid @RequestBody ProductRequest request) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
@@ -161,7 +161,7 @@ public class ProductController {
     @DeleteMapping(value = SKU_PATH)
     @ResponseStatus(OK)
     public ResponseEntity<Mono<Void>> deleteProduct(@RequestHeader(name = AUTHORIZATION, required = false) String authorization,
-                                                    @PathVariable String sku) {
+                                                    @Valid @SkuValidation @PathVariable String sku) {
         try {
             StopWatch totalTime = new StopWatch();
             totalTime.start();
