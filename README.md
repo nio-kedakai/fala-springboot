@@ -102,6 +102,11 @@ Para mapear los objetos a entidad usa **mapstruct**.
 
 ## Testing
 
+La carpeta que contiene los test unitarios es: `fala-springboot/src/test`
+
+En la carpeta `fala-springboot/src/test/resources/` se alojan los archivos json para los test de 
+integracion del servicio rest
+
 La APP cree bastantes componentes donde no dí con el 85% de cobertura pero sin con el 79% (enduve cerca).
 
 Pueden revisar la configuración del criterio de coverage en **gradle/sourceQA.gradle**
@@ -122,3 +127,11 @@ Las configuraciones están en la carpeta **config/**, la cual respectivamente ti
 En el IDE IntelliJ se puede revisar en la pestaña Gradle
 
 
+# Diagram
+![diagram](https://raw.githubusercontent.com/nio-kedakai/fala-springboot/master/gradle_app.png)
+
+En la imagen anterior se aprecia en el punto 1, es el task que permite levantar el proyecto o aplicación.
+
+Para lograr esto, primero se debe tener previamente ejecutado los pasos del 1 al 3 (docker y compose).
+
+En el punto 2, es la tarea que se corre para poder generar los reportes de análisis estáticos y ejecutar los TesUnit.

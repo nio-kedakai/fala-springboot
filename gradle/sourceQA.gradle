@@ -12,8 +12,6 @@ jacocoTestCoverageVerification {
                     "com/fala/challenge/infrastructure/adapter/*",
                     "com/fala/challenge/infrastructure/configuration/*",
                     "com/fala/challenge/infrastructure/repository/*"
-
-
             ])
         })
     }
