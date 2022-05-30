@@ -59,31 +59,38 @@ docker-compose down
 | --------------------------------------------------|:-------   |:----------------------------------------------------|
 | http://localhost:8080/product/                    | POST      | Permite crear productos (ver payload)             |
 | http://localhost:8080/v1/product/products         | GET       | Permite obtener toda la lista de productos       |
-| http://localhost:8080/v1/product/FAL-881898502    | GET       | Permite obtener un producto en especifico indicando por path el SKU
-| http://localhost:8080/v1/product/FAL-881898502    | PUT       | Permite actualizar un producto en especifico indicando por path el SKU (ver payload)
-| http://localhost:8080/v1/product/FAL-881898502    | DELETE    | Permite eliminar un producto en especifico indicando por path el SKU
+| http://localhost:8080/v1/product/FAL-881898510    | GET       | Permite obtener un producto en especifico indicando por path el SKU
+| http://localhost:8080/v1/product/FAL-881898510    | PUT       | Permite actualizar un producto en especifico indicando por path el SKU (ver payload)
+| http://localhost:8080/v1/product/FAL-881898510    | DELETE    | Permite eliminar un producto en especifico indicando por path el SKU
 
+
+Primero crear producto con SKU **FAL-881898510** antes de usar  GET, PUT y DELETE method.
 ### payload creación de producto
 ```
 {
-"sku":"FAL-881898503",
-"name":"aaa",
-"brand":"bbb",
-"size":"XL",
-"price":1.00,
-"principal_image":"http://www.falabella.com"
+    "sku":"FAL-881898510",
+    "name":"aaa",
+    "brand":"bbb",
+    "size":"XL",
+    "price":1.00, 
+    "principal_image":"http://www.falabella.com/C04",
+    "other_images": ["http://www.falabella.com/OI1", "http://www.falabella.com/OI2"]
 }
 ```
 
 ### payload actualización de producto
 ```
 {
-"sku":"FAL-881898503",
-"name":"DDDD",
-"brand":"ZZZZZZ",
-"size":"XL",
-"price":99.00,
-"principal_image":"http://www.falabella.com/2"
+    "sku":"FAL-881898510",
+    "name":"ZZZZ",
+    "brand":"XXXX",
+    "size":"XL",
+    "price":888.00, 
+    "principal_image":"http://falabella.scene7.com/is/image/Falabella/8406270_U7",
+    "other_images": [
+            "https://falabella.scene7.com/is/image/Falabella/8406270_U8",
+            "https://falabella.scene7.com/is/image/Falabella/8406270_U9"
+        ]
 }
 ```
 ## Arquitectura del proyecto
