@@ -1,6 +1,7 @@
 package com.fala.challenge.infrastructure.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,10 +12,13 @@ import javax.persistence.Table;
 
 import com.fala.challenge.domain.model.Product;
 import com.fala.challenge.infrastructure.mapper.ProductDomainMapper;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 
 @Data
@@ -23,6 +27,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class ProductEntity {
 
     @Id
@@ -41,6 +46,10 @@ public class ProductEntity {
 
     @Column(name = "principal_image")
     private String principalImage;
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb", name = "other_images")
+    private List<String> otherImages;
 
 
     public Product toDomain() {

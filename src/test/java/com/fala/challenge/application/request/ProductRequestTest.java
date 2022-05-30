@@ -1,6 +1,8 @@
 package com.fala.challenge.application.request;
 
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,8 @@ class ProductRequestTest {
 
     @Test
     void test() {
-        ProductRequest productRequest = new ProductRequest("http://www.falabella.com");
+        ProductRequest productRequest = new ProductRequest("http://www.falabella.com",
+                Arrays.asList("http://www.falabella.com/1", "http://www.falabella.com/2"));
         assertNotNull(productRequest);
     }
 

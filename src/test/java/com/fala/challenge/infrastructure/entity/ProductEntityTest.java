@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.fala.challenge.fixture.Creator.BRAND;
 import static com.fala.challenge.fixture.Creator.NAME;
+import static com.fala.challenge.fixture.Creator.OTHER_IMAGES;
 import static com.fala.challenge.fixture.Creator.PRODUCT_ID;
 import static com.fala.challenge.fixture.Creator.SKU_RANDOM;
 import static com.fala.challenge.fixture.Creator.createFullyProductEntity;
@@ -48,9 +49,10 @@ class ProductEntityTest {
         subject.setBrand(BRAND);
         subject.setId(Long.parseLong(PRODUCT_ID));
         subject.setName(NAME);
-        subject.setPrincipalImage("https://falabella.scene7.com/is/image/Falabella/8406270_1");
+        subject.setPrincipalImage(OTHER_IMAGES.get(0));
         subject.setPrice(new BigDecimal("429990.00"));
         subject.setSize("XL");
+        subject.setOtherImages(OTHER_IMAGES);
 
         ProductEntity productEntity = subject;
 

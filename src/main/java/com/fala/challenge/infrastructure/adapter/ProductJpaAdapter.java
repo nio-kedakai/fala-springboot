@@ -1,6 +1,7 @@
 package com.fala.challenge.infrastructure.adapter;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import com.fala.challenge.domain.model.Product;
@@ -37,14 +38,15 @@ public class ProductJpaAdapter implements ProductPersistencePort {
     @Override
     public Mono<ProductEntity> findBySku(String sku) {
         try {
-            Mono<ProductEntity> productEntityMono = Mono
-                    .defer(() -> Mono.just(productRepository.findBySku(sku)));
+            ProductEntity productEntity = productRepository.findBySku(sku);
 
-            Optional optProductEntity = Optional.ofNullable(productEntityMono);
+            Optional optProductEntity = Optional.ofNullable(productEntity);
             if (!optProductEntity.isPresent()) {
                 throw ResourceException.notExistingProduct();
             }
-            return productEntityMono;
+
+            return Mono.defer(() -> Mono.just(productEntity));
+
         } catch (IllegalArgumentException e) {
             throw ResourceException.illegalArgument();
         }
@@ -55,14 +57,15 @@ public class ProductJpaAdapter implements ProductPersistencePort {
     @Override
     public Flux<ProductEntity> findAllProducts() {
         try {
-            Flux<ProductEntity> productEntityFlux = Flux.defer(() -> Flux.fromIterable(productRepository.findAll()));
+            List<ProductEntity> productEntities = productRepository.findAll();
 
-            Optional optProductEntities = Optional.ofNullable(productEntityFlux);
+
+            Optional optProductEntities = Optional.ofNullable(productEntities);
             if (!optProductEntities.isPresent()) {
                 throw ResourceException.notExistingProduct();
             }
 
-            return productEntityFlux;
+            return Flux.defer(() -> Flux.fromIterable(productEntities));
         } catch (IllegalArgumentException e) {
             throw ResourceException.illegalArgument();
         }

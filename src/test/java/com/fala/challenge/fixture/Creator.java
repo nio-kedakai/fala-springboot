@@ -1,6 +1,7 @@
 package com.fala.challenge.fixture;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import com.fala.challenge.domain.model.Product;
@@ -14,7 +15,9 @@ public class Creator {
     public static final String BRAND = RandomStringUtils.randomAlphabetic(10);
     public static final String NAME = RandomStringUtils.randomAlphabetic(10);
     public static final String SKU_RANDOM = "FAL-840627022";
-
+    public static final List<String> OTHER_IMAGES =
+            Arrays.asList("https://falabella.scene7.com/is/image/Falabella/8406270_1",
+                    "https://falabella.scene7.com/is/image/Falabella/8406270_2");
 
     public static Product createFullyProduct() {
         return Product.builder()
@@ -22,7 +25,7 @@ public class Creator {
                 .brand(BRAND)
                 .id(Long.parseLong(PRODUCT_ID))
                 .name(NAME)
-                .principalImage("https://falabella.scene7.com/is/image/Falabella/8406270_1")
+                .principalImage(OTHER_IMAGES.get(0))
                 .price(new BigDecimal("429990.00"))
                 .size("37")
                 .build();
@@ -34,21 +37,23 @@ public class Creator {
                 .brand(BRAND)
                 .id(Long.parseLong(PRODUCT_ID))
                 .name(NAME)
-                .principalImage("https://falabella.scene7.com/is/image/Falabella/8406270_1")
+                .principalImage(OTHER_IMAGES.get(0))
                 .price(new BigDecimal("429990.00"))
                 .size("37")
+                .otherImages(OTHER_IMAGES)
                 .build();
     }
 
     public static List<ProductEntity> createListProductEntity() {
-        return List.of(ProductEntity.builder()
+        return Arrays.asList(ProductEntity.builder()
                 .sku(SKU_RANDOM)
                 .brand(BRAND)
                 .id(Long.parseLong(PRODUCT_ID))
                 .name(NAME)
-                .principalImage("https://falabella.scene7.com/is/image/Falabella/8406270_1")
+                .principalImage(OTHER_IMAGES.get(0))
                 .price(new BigDecimal("429990.00"))
                 .size("37")
+                .otherImages(OTHER_IMAGES)
                 .build());
     }
 
