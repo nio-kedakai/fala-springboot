@@ -1,5 +1,7 @@
 package com.fala.challenge.application.request;
 
+import java.util.List;
+
 import com.fala.challenge.domain.model.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,9 @@ public class ProductRequest extends Product {
 
     @JsonProperty("principal_image")
     private String principalImage;
+
+    @JsonProperty("other_images")
+    private List<String> otherImages;
 
 
 }
